@@ -44,7 +44,7 @@ class DtsBundlerPlugin {
     var declarations = '';
     for (var fileName in declarationFiles) {
       var declarationFile = declarationFiles[fileName];
-      var data = declarationFile._value;
+      var data = declarationFile.source();
 
       var lines = data.split('\n');
       var i = lines.length;
