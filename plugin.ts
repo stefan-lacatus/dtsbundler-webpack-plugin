@@ -76,12 +76,15 @@ class DtsBundlerPlugin {
         if (excludeLine) {
           lines.splice(i, 1);
         }
+        else {
+          // Adding internal module indentation
+          lines[i] = '  ' + lines[i];
+        }
       }
       declarations += lines.join('\n') + '\n\n';
     }
 
-    var output = 'declare module ' + this.moduleName + '\n{\n' + declarations + '}';
-    return output;
+    return `declare module ${this.moduleName}\n{\n${declarations}}`;
   }
 
 }
