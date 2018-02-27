@@ -69,7 +69,7 @@ var DtsBundlerPlugin = (function () {
             }
             declarations += lines.join('\n') + '\n\n';
         }
-        return "declare module " + this.moduleName + "\n{\n" + declarations + "}";
+        return "\n      declare module " + this.moduleName + " {\n        " + declarations + "\n      }\n      export default " + this.moduleName + ";\n      ";
     };
     return DtsBundlerPlugin;
 }());
