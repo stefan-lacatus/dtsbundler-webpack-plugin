@@ -46,9 +46,9 @@ var DtsBundlerPlugin = (function () {
                 //exclude empty lines
                 var excludeLine = line == '';
                 //exclude export statements
-                excludeLine = excludeLine || /export\s+({)|(default)/.test(line);
+                excludeLine = excludeLine || (/export\s+({)|(default)/.test(line) && fileName !== 'main.d.ts');
                 // leave a line with inline export but remove export keyword
-                if (!excludeLine) {
+                if (!excludeLine && fileName !== 'main.d.ts') {
                     lines[i] = lines[i].replace(/export\s/, '');
                     lines[i] = lines[i].replace(/declare\s/, '');
                     line = lines[i];

@@ -4,6 +4,7 @@
   "description": "Generates a single module declaration file from separate generated declaration files from an EXTERNAL module",
   "main": "plugin.js",
   "scripts": {
+    "start": "npm run build",
     "build": "tsc"
   },
   "keywords": [
