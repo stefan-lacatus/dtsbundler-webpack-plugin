@@ -69,7 +69,7 @@ var DtsBundlerPlugin = (function () {
             }
             declarations += lines.join('\n') + '\n\n';
         }
-        return declarations;
+        return "declare module " + this.moduleName + "\n{\n" + declarations + "}\n module.exports= " + this.moduleName + ";";
     };
     return DtsBundlerPlugin;
 }());
