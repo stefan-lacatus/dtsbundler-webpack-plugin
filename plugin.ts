@@ -85,7 +85,7 @@ class DtsBundlerPlugin {
       declarations += lines.join('\n') + '\n\n';
     }
 
-    return declarations;
+    return `declare module ${this.moduleName}\n{\n${declarations}}\nmodule.exports = ${this.moduleName};`;;
   }
 
 }
