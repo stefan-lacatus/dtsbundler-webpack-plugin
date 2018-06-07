@@ -1,21 +1,24 @@
 "use strict";
-var DtsBundlerPlugin = (function () {
+var DtsBundlerPlugin = /** @class */ (function () {
     function DtsBundlerPlugin(options) {
         if (options === void 0) { options = {}; }
         this.out = options.out || './build/';
         this.excludedReferences = options.excludedReferences ? options.excludedReferences : undefined;
         this.moduleName = options.moduleName || 'Lib';
+        this.excludePattern = options.excludePattern || undefined;
     }
     DtsBundlerPlugin.prototype.apply = function (compiler) {
         var _this = this;
         //when the compiler is ready to emit files
-        compiler.plugin('emit', function (compilation, callback) {
+        compiler.hooks.emit.tapAsync('DtsBundlerPlugin', function (compilation, callback) {
             //collect all generated declaration files
             //and remove them from the assets that will be emited
             var declarationFiles = {};
             for (var filename in compilation.assets) {
                 if (filename.indexOf('.d.ts') !== -1) {
-                    declarationFiles[filename] = compilation.assets[filename];
+                    if (!(_this.excludePattern && filename.match(_this.excludePattern))) {
+                        declarationFiles[filename] = compilation.assets[filename];
+                    }
                     delete compilation.assets[filename];
                 }
             }
@@ -69,7 +72,8 @@ var DtsBundlerPlugin = (function () {
             }
             declarations += lines.join('\n') + '\n\n';
         }
-        return "declare module " + this.moduleName + "\n{\n" + declarations + "}\n module.exports= " + this.moduleName + ";";
+        return "declare module " + this.moduleName + "\n{\n" + declarations + "}\nmodule.exports = " + this.moduleName + ";";
+        ;
     };
     return DtsBundlerPlugin;
 }());

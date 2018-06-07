@@ -2,22 +2,26 @@ class DtsBundlerPlugin {
   out: string;
   moduleName: string;
   excludedReferences: any[];
+  excludePattern?: RegExp;
 
   constructor(options: any = {}) {
     this.out = options.out || './build/';
     this.excludedReferences = options.excludedReferences ? options.excludedReferences : undefined;
     this.moduleName = options.moduleName || 'Lib';
+    this.excludePattern = options.excludePattern || undefined;
   }
 
   apply(compiler) {
     //when the compiler is ready to emit files
-    compiler.plugin('emit', (compilation, callback) => {
+    compiler.hooks.emit.tapAsync('DtsBundlerPlugin', (compilation, callback) => {
       //collect all generated declaration files
       //and remove them from the assets that will be emited
       var declarationFiles = {};
       for (var filename in compilation.assets) {
         if (filename.indexOf('.d.ts') !== -1) {
-          declarationFiles[filename] = compilation.assets[filename];
+          if(!(this.excludePattern && filename.match(this.excludePattern))) {
+            declarationFiles[filename] = compilation.assets[filename];
+          }
           delete compilation.assets[filename];
         }
       }
